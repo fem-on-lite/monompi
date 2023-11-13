@@ -1,0 +1,25 @@
+name: Check for upstream changes in OpenMPI
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for upstream changes in OpenMPI
+        uses: fem-on-colab/is-synced-with-upstream-action@main
+        with:
+          upstream-repository: fem-on-colab/fem-on-colab.github.io
+          upstream-ref: main
+          target-ref: check_openmpi_changes
+          file-patterns: 'ompi/include/mpi.h.in'
+          commit-message-prefix: Check for upstream changes in OpenMPI
+      - name: Warn if scheduled workflow is about to be disabled
+        if: github.repository == 'fem-on-lite/monompi.github.io' && github.ref == 'refs/heads/main' && github.event_name == 'schedule'
+        uses: fem-on-colab/warn-workflow-about-to-be-disabled-action@main
+        with:
+          workflow-filename: check_openmpi_changes.yml
+          days-elapsed: 55

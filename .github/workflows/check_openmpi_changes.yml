@@ -17,8 +17,12 @@ jobs:
           target-ref: check_openmpi_changes
           file-patterns: 'ompi/include/mpi.h.in'
           commit-message-prefix: Check for upstream changes in OpenMPI
+
+  warn:
+    runs-on: ubuntu-latest
+    if: github.repository == 'fem-on-lite/monompi' && github.ref == 'refs/heads/main' && github.event_name == 'schedule'
+    steps:
       - name: Warn if scheduled workflow is about to be disabled
-        if: github.repository == 'fem-on-lite/monompi.github.io' && github.ref == 'refs/heads/main' && github.event_name == 'schedule'
         uses: fem-on-colab/warn-workflow-about-to-be-disabled-action@main
         with:
           workflow-filename: check_openmpi_changes.yml
